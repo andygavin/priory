@@ -13,17 +13,33 @@ AND item_id = :item_id
 
 -- :name get-items :? :*
 -- :doc retrieves a user record given the id
-SELECT i.id, i.sys_id, i.description, i.notes, i.status FROM item i
+SELECT i.id, i.sys_id, i.description, i.notes, i.status,i.is_active FROM item i
 
--- :name get-scores :? :1
--- :dpc get scores for item
-SELECT s.item_id, s.score, st.headline, st.description, s.score_type_id
-FROM scores s, score_type st
-WHERE s.score_type_id = st.id
-s.item_id = :item_id
+-- :name get-scores :? :*
+-- :doc get score table body
+SELECT score,score_type_id,item_id
+FROM  scores
+ORDER BY item_id, score_type_id
 
 -- :name get-weights :? :*
--- :dpc get scores for item
+-- :doc get scores for item
 SELECT  w.weight, st.headline, st.description, w.score_type_id
-FROM weights w, score_type st
-WHERE w.score_type_id = st.id
+FROM weights w
+JOIN score_type st ON w.score_type_id = st.id
+
+-- :name get-settings :? :*
+-- :doc read settings table
+SELECT keyname,val
+FROM setting
+
+-- :name get-setting  :? :1
+-- :doc read setting  table
+SELECT keyname,val
+FROM setting
+WHERE keyname = :keyname
+
+-- :name get-score-types :? :*
+-- :doc read score types in order
+SELECT id, headline, description
+FROM score_type
+ORDER BY id

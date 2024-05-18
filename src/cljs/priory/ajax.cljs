@@ -14,13 +14,34 @@
         (update :headers #(merge {"x-csrf-token" js/csrfToken} %)))
     request))
 
+
+;; (def bigdecimal-write-handler
+;;   (transit/write-handler
+;;    "bigdec"
+;;    str
+;;    (fn [x] (str x))))
+
+;; (defn bigdecimal-read-handler [tagged-value]
+;;   (transit/bigdec (.-rep tagged-value)))
+
 ;; injects transit serialization config into request options
+
+
 
 (defn as-transit [opts]
   (merge {:format          (ajax/transit-request-format
-                             {:writer (transit/writer :json time/time-serialization-handlers)})
+                            {:writer (transit/writer :json time/time-serialization-handlers
+                                                     ;; (update-in
+                                                     ;;   time/time-serialization-handlers
+                                                     ;;  [:handlers] assoc java.math.BigDecimal bigdecimal-write-handler)
+                                                     )})
           :response-format (ajax/transit-response-format
-                             {:reader (transit/reader :json time/time-deserialization-handlers)})}
+                            {:reader (transit/reader :json time/time-deserialization-handlers
+                                                     ;; (update-in
+                                                     ;;  time/time-deserialization-handlers
+                                                     ;;  [:handlers] assoc "bigdec" bigdecimal-read-handler)
+
+                                                     )})}
          opts))
 
 (defn load-interceptors! []

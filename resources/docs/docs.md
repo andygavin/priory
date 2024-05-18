@@ -1,103 +1,56 @@
-<h1 class="title">Congratulations, your <a class="alert-link" href="http://luminusweb.net">Luminus</a> site is ready!</h1>
+# Proto-type display for priortisation frameworks
 
-This page will help guide you through the first steps of building your site.
+This project is a prototype, dynamic display for a score-based prioritisation framework. What system of scoring and
+summing is presented is driven from data.
 
-<p class="title is-5">Why are you seeing this page?</p>
+Build into the solution is a database which contains:
 
-The `home-routes` handler in the `priory.routes.home` namespace
-defines the route that invokes the `home-page` function whenever an HTTP
-request is made to the `/` URI using the `GET` method.
+- The score-types which are the columns for each proposed item which we are scoring by
+- A set of weights are then defined for each score type
+- The function which defines the score is then defined as data.
 
-```
-(defn home-routes []
-  [""
-   {:middleware [middleware/wrap-csrf
-                 middleware/wrap-formats]}
-   ["/" {:get home-page}]
-   ["/docs" {:get (fn [request]
-                    (-> (response/ok (-> "docs/docs.md" io/resource slurp))
-                        (response/header "Content-Type" "text/plain; charset=utf-8")))}]])
-```
+# Types of priortisation framework
 
-The `home-page` function will in turn call the `priory.layout/render` function
-to render the HTML content:
+There are a number of proritisation frameworks which are used, these all have their advantages and disadvantages. Some
+are for early in product development and some more complex aiming to score work for systems like SaFE.
 
-```
-(defn home-page [request]
-  (layout/render request "home.html"))
-```
+- **RICE**
+: a Reasonably common framework in product management where Reach, Impact, Confidence are weighted against Effort.
+- **WSJF**
+: A framework used in SaFE which aims to score different aspects of development which is used for cross-departmental planning with different stakeholders, as such scoring takes longer.
+- **ICE**
+: Simple, but subjective, framework.  Which allows for ease of scoring.
+- **Feature Buckets**
+: Model for sorting features by their impact
+- **Impact-Effort Matrix**
+: Team orientated scoring using quadrants.
 
-The page contains a link to the compiled ClojureScript found in the `target/cljsbuild/public` folder:
+## ICE
 
-```
-{% script "/js/app.js" %}
-```
+ICE is an acromym for *Impact*, *Confidence*, and *Ease*. Each item is given a score from one to 10 with all three
+numbers being added to get the final score.
 
-The rest of this page is rendered by ClojureScript found in the `src/cljs/priory/core.cljs` file.
+### Impact
 
+How impactful is the change or initiative.
+- 1 : very low impact
+- 2 - 5 : Minimal impact
+- 6 - 8 Measurable impact
+- 8 - 10 Significant impact
 
+### Confidence
 
-<p class="title is-5">Organizing the routes</p>
+How confident that the feature will be well received/will provide the benefits outlined.  Measure of a risk of the time spent.  Higher confidence items are backed with data. Might include measuring risks to assess.
+- 1 : Low Confidence
+- 2 - 5 : Minimal confidence
+- 6 - 8 : Measurable Confidence
+- 9 - 10 : Significant Confidence
 
-The routes are aggregated and wrapped with middleware in the `priory.handler` namespace:
+### Ease
 
-```
-(mount/defstate app-routes
-  :start
-  (ring/ring-handler
-    (ring/router
-      [(home-routes)])
-    (ring/routes
-      (ring/create-resource-handler
-        {:path "/"})
-      (wrap-content-type
-        (wrap-webjars (constantly nil)))
-      (ring/create-default-handler
-        {:not-found
-         (constantly (error-page {:status 404, :title "404 - Page not found"}))
-         :method-not-allowed
-         (constantly (error-page {:status 405, :title "405 - Not allowed"}))
-         :not-acceptable
-         (constantly (error-page {:status 406, :title "406 - Not acceptable"}))}))))
-```
+How long will it take to develop
 
-The `app` definition groups all the routes in the application into a single handler.
-A default route group is added to handle the `404` case.
-
-<a class="level-item button" href="https://luminusweb.com/docs/routes.html">learn more about routing »</a>
-
-The `home-routes` are wrapped with two middleware functions. The first enables CSRF protection.
-The second takes care of serializing and deserializing various encoding formats, such as JSON.
-
-<p class="title is-5">Managing your middleware</p>
-
-Request middleware functions are located under the `priory.middleware` namespace.
-
-This namespace is reserved for any custom middleware for the application. Some default middleware is
-already defined here. The middleware is assembled in the `wrap-base` function.
-
-Middleware used for development is placed in the `priory.dev-middleware` namespace found in
-the `env/dev/clj/` source path.
-
-<a class="level-item button" href="https://luminusweb.com/docs/middleware.html">learn more about middleware »</a>
-
-<div class="bs-callout bs-callout-danger">
-
-#### Database configuration is required
-
-If you haven't already, then please follow the steps below to configure your database connection and run the necessary migrations.
-
-* Run `lein run migrate` in the root of the project to create the tables.
-* Let `mount` know to start the database connection by `require`-ing `priory.db.core` in some other namespace.
-* Restart the application.
-
-<a class="btn btn-primary" href="http://www.luminusweb.net/docs/database.md">learn more about database access »</a>
-
-</div>
-
-
-
-<p class="title is-5">Need some help?</p>
-
-Visit the [official documentation](https://luminusweb.com/docs/guestbook) for examples
-on how to accomplish common tasks with Luminus. The `#luminus` channel on the [Clojurians Slack](http://clojurians.net/) and [Google Group](https://groups.google.com/forum/#!forum/luminusweb) are both great places to seek help and discuss projects with other users.
+- 1 -2 : Long timeframe
+- 3 - 5 : Significant timeframe
+- 6 - 7 : Minimal timeframe
+- 8 - 10 : Short timeframe.

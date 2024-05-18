@@ -9,7 +9,8 @@
                  [com.cognitect/transit-clj "1.0.329"]
                  [com.cognitect/transit-cljs "0.8.280"]
                  [com.google.javascript/closure-compiler-unshaded "v20220803"]
-                 [com.h2database/h2 "1.4.200"]
+                 [com.h2database/h2 "2.2.220"]
+                ; [com.h2database/h2 "1.4.200"]
                  [conman "0.9.5"]
                  [cprop "0.1.19"]
                  [day8.re-frame/http-fx "0.2.4"]
@@ -37,6 +38,8 @@
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [re-frame "1.2.0"]
                  [reagent "1.1.1"]
+                 [reagent-data-table "2.2.2"]
+                 [re-catch "0.1.4"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.9.6"]
                  [ring/ring-defaults "0.3.4"]
@@ -44,21 +47,21 @@
                  [thheller/shadow-cljs "2.20.3" :scope "provided"]]
 
   :min-lein-version "2.0.0"
-  
+
   :source-paths ["src/clj" "src/cljs" "src/cljc"]
   :test-paths ["test/clj"]
   :resource-paths ["resources" "target/cljsbuild"]
   :target-path "target/%s/"
   :main ^:skip-aot priory.core
 
-  :plugins [] 
+  :plugins []
   :clean-targets ^{:protect false}
   [:target-path "target/cljsbuild"]
-  
+
 
   :profiles
   {:uberjar {:omit-source true
-             
+
              :prep-tasks ["compile" ["run" "-m" "shadow.cljs.devtools.cli" "release" "app"]]
              :aot :all
              :uberjar-name "priory.jar"
@@ -79,9 +82,9 @@
                                  [ring/ring-mock "0.4.0"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
                                  [jonase/eastwood "1.2.4"]
-                                 [cider/cider-nrepl "0.26.0"]] 
-                  
-                  
+                                 [cider/cider-nrepl "0.26.0"]]
+
+
                   :source-paths ["env/dev/clj"  "env/dev/cljs" "test/cljs" ]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user
@@ -89,9 +92,9 @@
                   :injections [(require 'pjstadig.humane-test-output)
                                (pjstadig.humane-test-output/activate!)]}
    :project/test {:jvm-opts ["-Dconf=test-config.edn" ]
-                  :resource-paths ["env/test/resources"] 
-                  
-                  
+                  :resource-paths ["env/test/resources"]
+
+
                   }
    :profiles/dev {}
    :profiles/test {}})

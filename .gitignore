@@ -18,3 +18,4 @@ profiles.clj
 /node_modules
 /#log
 *~undo-tree~
+log

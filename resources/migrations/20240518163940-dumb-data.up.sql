@@ -1,0 +1,15 @@
+INSERT INTO item VALUES (1, 'A-11', 'An Item which of work', 'Notes', 'In Progress', true);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (1, 1, 1, 1);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (2, 1, 2, 1);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (3, 1, 3, 1);
+--;;
+INSERT INTO item VALUES (2, 'A-12', 'Another Something', 'Notes', 'In Progress', true);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (4, 2, 1, 1);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (5, 2, 2, 1);
+--;;
+INSERT INTO scores (id, item_id, score_type_id, score) VALUES (6, 2, 3, 1);
